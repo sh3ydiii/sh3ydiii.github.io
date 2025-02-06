@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Привязка Кошелька</title>
+    <style>
+        body {
+            background-color: #111111;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 15px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Привязать криптокошелек</h1>
+    <p>Выберите ваш кошелек для привязки:</p>
+    <button id="metamaskButton">MetaMask</button>
+    <button id="coinbaseButton">Coinbase Wallet</button>
+    <button id="trustwalletButton">Trust Wallet</button>
+
+    <script>
+        // Подключение MetaMask
+        document.getElementById("metamaskButton").addEventListener("click", () => {
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.request({ method: 'eth_requestAccounts' })
+                .then(accounts => {
+                    alert('MetaMask подключен. Ваш адрес: ' + accounts[0]);
+                    // Отправка данных в Telegram через API
+                })
+                .catch(error => {
+                    alert('Ошибка подключения MetaMask: ' + error.message);
+                });
+            } else {
+                alert('MetaMask не установлен!');
+            }
+        });
+
+        // Подключение Coinbase Wallet
+        document.getElementById("coinbaseButton").addEventListener("click", () => {
+            if (window.coinbaseWallet) {
+                window.coinbaseWallet.enable()
+                .then(accounts => {
+                    alert('Coinbase Wallet подключен. Ваш адрес: ' + accounts[0]);
+                    // Отправка данных в Telegram через API
+                })
+                .catch(error => {
+                    alert('Ошибка подключения Coinbase Wallet: ' + error.message);
+                });
+            } else {
+                alert('Coinbase Wallet не установлен!');
+            }
+        });
+
+        document.getElementById("trustwalletButton").addEventListener("click", () => {
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.request({ method: 'eth_requestAccounts' })
+                .then(accounts => {
+                    alert('Trust Wallet подключен. Ваш адрес: ' + accounts[0]);
+                })
+                .catch(error => {
+                    alert('Ошибка подключения Trust Wallet: ' + error.message);
+                });
+            } else {
+                alert('Trust Wallet не установлен!');
+            }
+        });
+    </script>
+</body>
+</html>
