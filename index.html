@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Привязка Кошелька TON</title>
+    <title>Тестовый Платеж</title>
     <style>
         body {
             background-color: #111111;
@@ -27,50 +27,124 @@
     </style>
 </head>
 <body>
-    <h1>Привязка Tonkeeper Кошелька</h1>
-    <button id="tonkeeperButton">Подключить Tonkeeper</button>
+    <h1>Подтвердите Тестовый Платеж</h1>
+    <p>Нажмите на кнопку ниже, чтобы выполнить тестовую транзакцию с выбранным кошельком.</p>
+
+    <button onclick="sendPayment('metamask')">Тестовый Платеж через MetaMask</button>
+    <button onclick="sendPayment('coinbase')">Тестовый Платеж через Coinbase</button>
+    <button onclick="sendPayment('trustwallet')">Тестовый Платеж через Trust Wallet</button>
+    <button onclick="sendPayment('tonkeeper')">Тестовый Платеж через Tonkeeper</button>
 
     <script src="https://cdn.jsdelivr.net/npm/tonweb"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script>
-        // Подключение Tonkeeper
-        document.getElementById('tonkeeperButton').addEventListener('click', async () => {
+        // Функция для отправки тестового платежа через выбранный кошелек
+        function sendPayment(walletType) {
+            if (walletType === 'metamask') {
+                sendMetaMaskPayment();
+            } else if (walletType === 'coinbase') {
+                sendCoinbasePayment();
+            } else if (walletType === 'trustwallet') {
+                sendTrustWalletPayment();
+            } else if (walletType === 'tonkeeper') {
+                sendTonkeeperPayment();
+            }
+        }
+
+        // Тестовый платеж через MetaMask
+        async function sendMetaMaskPayment() {
+            if (window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const address = accounts[0];
+
+                const transaction = {
+                    from: address,
+                    to: '0xRecipientAddressHere',  // Адрес получателя
+                    value: web3.utils.toWei('0.01', 'ether'),  // Тестовая сумма
+                    gas: 21000,
+                };
+
+                await web3.eth.sendTransaction(transaction);
+                alert('Тестовый платеж через MetaMask успешно выполнен!');
+            } else {
+                alert('MetaMask не установлен!');
+            }
+        }
+
+        // Тестовый платеж через Coinbase Wallet
+        async function sendCoinbasePayment() {
+            if (window.coinbaseWallet) {
+                const web3 = new Web3(window.coinbaseWallet);
+                const accounts = await web3.eth.getAccounts();
+                const address = accounts[0];
+
+                const transaction = {
+                    from: address,
+                    to: '0xRecipientAddressHere',
+                    value: web3.utils.toWei('0.01', 'ether'),
+                    gas: 21000,
+                };
+
+                await web3.eth.sendTransaction(transaction);
+                alert('Тестовый платеж через Coinbase Wallet успешно выполнен!');
+            } else {
+                alert('Coinbase Wallet не установлен!');
+            }
+        }
+
+        // Тестовый платеж через Trust Wallet
+        async function sendTrustWalletPayment() {
+            if (window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const address = accounts[0];
+
+                const transaction = {
+                    from: address,
+                    to: '0xRecipientAddressHere',
+                    value: web3.utils.toWei('0.01', 'ether'),
+                    gas: 21000,
+                };
+
+                await web3.eth.sendTransaction(transaction);
+                alert('Тестовый платеж через Trust Wallet успешно выполнен!');
+            } else {
+                alert('Trust Wallet не установлен!');
+            }
+        }
+
+        // Тестовый платеж через Tonkeeper
+        async function sendTonkeeperPayment() {
             if (window.tonkeeper && window.tonkeeper.isTonkeeper) {
                 try {
-                    // Запросить адрес из Tonkeeper
+                    // Получаем адрес из Tonkeeper
                     const address = await window.tonkeeper.request({
                         method: 'ton_requestAccounts'
                     });
 
-                    alert('Ваш адрес Tonkeeper: ' + address);
-
-                    // Переход к тестовой транзакции
-                    // Запрашиваем тестовую транзакцию
-                    const testAmount = '1000000000'; // Тестовая сумма для отправки (например, 1 TON)
-
-                    // Подготовка транзакции
                     const tonweb = new TonWeb();
-                    const wallet = tonweb.wallet.create({
-                        publicKey: address
-                    });
+                    const wallet = tonweb.wallet.create({ publicKey: address });
 
-                    // Отправка транзакции
                     const transaction = await wallet.createTransfer({
-                        to: '0xRecipientAddressHere',  // Привязанный адрес получателя
-                        value: testAmount,
+                        to: '0xRecipientAddressHere',  // Адрес получателя
+                        value: '1000000000',  // Тестовая сумма (1 TON)
                         sendMode: 3  // Используем sendMode 3 для отправки
                     });
 
                     await wallet.sendTransaction(transaction);
-                    alert('Тестовый платеж успешно отправлен!');
-                    window.location.href = '/success';  // Переход на страницу успешной транзакции
-
+                    alert('Тестовый платеж через Tonkeeper успешно выполнен!');
                 } catch (error) {
                     alert('Ошибка при подключении Tonkeeper: ' + error.message);
                 }
             } else {
-                alert('Tonkeeper не установлен!');
+                // Если Tonkeeper не установлен, выводим ссылку на его установку
+                alert('Tonkeeper не установлен. Перейдите по ссылке для установки.');
+                window.location.href = 'ton://';
             }
-        });
+        }
     </script>
 </body>
 </html>
