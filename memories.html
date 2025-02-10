@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наши Воспоминания</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+        body {
+            background-image: url('./background.jpg');
+            text-align: center;
+            font-family: 'Ubuntu', sans-serif;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .memory-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 600px; 
+            height: 700px; 
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .memory-container img {
+            width: 100%;
+            height: 400px; /* Фиксированная высота изображения */
+            object-fit: contain; /* Подгоняет картинку под размеры блока без обрезки */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .description {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #ff0080;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        button {
+            background-color: #ff4da6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        button:hover {
+            background-color: #ff1a75;
+        }
+        
+        .heart {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            background-color: red;
+            clip-path: path('M24.8,6.2c0,3.5-5.4,8.7-11.7,13.9C8.2,14.9,2.8,9.7,2.8,6.2c0-3.4,2.7-5.9,6.1-5.9c2.1,0,3.9,1.2,4.9,2.9 c1-1.7,2.8-2.9,4.9-2.9C22,0.3,24.8,2.8,24.8,6.2z');
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+        .back {
+            margin-top: 20px;
+        }
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        @media (max-width: 768px) {
+    .memory-container {
+        width: 90%; /* Растягивается на всю ширину экрана */
+        height: auto; /* Автоматическая высота */
+        padding: 15px;
+    }
+
+    .memory-container img {
+        height: 250px; /* Уменьшаем высоту изображения */
+    }
+
+    .description {
+        font-size: 16px;
+    }
+
+    .buttons {
+        gap: 5px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .back {
+        margin-top: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="memory-container">
+        <img id="memory-img" src="memory1.jpg" alt="Наше фото">
+        <div class="description" id="memory-desc">Эта мы гуляли с моими братьями))) ❤️</div>
+        
+        <div class="buttons">
+            <button onclick="prevMemory()">Назад</button>
+            <button onclick="nextMemory()">Вперед</button>
+            
+        </div>
+        <button class="back" onclick="window.location.href='index.html'">Назад к валентинке</button>
+    </div>
+    
+    <script>
+        const memories = [
+            { img: 'memory1.jpg', desc: 'Эта мы гуляли с моими братьями))) ❤️' },
+            { img: 'memory2.jpg', desc: 'Новый год с моей семьей 💋' },
+            { img: 'memory3.jpg', desc: 'Мы красивые на юбилее 😍' },
+            { img: 'memory4.jpg', desc: 'На том же юбилее я тя целую 😘' },
+            { img: 'memory5.jpg', desc: 'Мы на лав шесть шесть хыхы 🧑‍🎤' },
+            { img: 'memory6.jpg', desc: 'Я, Темик, Ты 👶' },
+            { img: 'memory7.jpg', desc: 'Мы опаздывали на кино)) 😂' },
+            { img: 'memory8.jpg', desc: 'Мы в москве с нашими родителями 👩‍👩‍👦' },
+            { img: 'memory9.jpg', desc: 'Мы на фоне елки 🌲' },
+            { img: 'memory10.jpg', desc: 'Ты с Египта,я скучал 😢' },
+            { img: 'memory11.jpg', desc: '' },
+        ];
+        
+        let currentMemory = 0;
+        
+        function updateMemory() {
+            document.getElementById('memory-img').src = memories[currentMemory].img;
+            document.getElementById('memory-desc').innerText = memories[currentMemory].desc;
+        }
+        
+        function nextMemory() {
+            currentMemory = (currentMemory + 1) % memories.length;
+            updateMemory();
+        }
+        
+        function prevMemory() {
+            currentMemory = (currentMemory - 1 + memories.length) % memories.length;
+            updateMemory();
+        }
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            document.body.appendChild(heart);
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-50px';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+        
+        setInterval(createHeart, 200);
+    </script>
+</body>
+</html>
