@@ -1,148 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тестовый Платеж</title>
+    <title>Валентинка любимой!</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
         body {
-            background-color: #111111;
-            color: white;
-            font-family: Arial, sans-serif;
+            background-image: url('./background.jpg');
             text-align: center;
-            padding: 30px;
         }
+        .ubuntu-bold {
+        font-family: "Ubuntu", serif;
+        font-weight: 700;
+        font-style: normal;
+        }
+        .wishes {
+            font-family: 'ubuntu-bold', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        h1 {
+            color: rgb(254, 156, 156);
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+
+        .wishes p {
+            color: #430222;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        
+        .wish-container {
+            margin-top: 40px;
+            font-size: 24px;
+            color: #ff0080;
+            font-weight: bold;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .buttons {
+            margin-top: 10px;
+        }
+        
         button {
-            padding: 15px;
-            background-color: #0066cc;
+            background-color: #ff4da6;
             color: white;
             border: none;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            font-size: 18px;
             margin: 10px;
+            border-radius: 5px;
+            margin-left: 20px;
         }
+        
         button:hover {
-            background-color: #005bb5;
+            background-color: #ff1a75;
+        }
+        
+        .heart {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            background-color: red;
+            clip-path: path('M24.8,6.2c0,3.5-5.4,8.7-11.7,13.9C8.2,14.9,2.8,9.7,2.8,6.2c0-3.4,2.7-5.9,6.1-5.9c2.1,0,3.9,1.2,4.9,2.9 c1-1.7,2.8-2.9,4.9-2.9C22,0.3,24.8,2.8,24.8,6.2z');
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Подтвердите Тестовый Платеж</h1>
-    <p>Нажмите на кнопку ниже, чтобы выполнить тестовую транзакцию с выбранным кошельком.</p>
-
-    <button onclick="sendPayment('metamask')">Тестовый Платеж через MetaMask</button>
-    <button onclick="sendPayment('coinbase')">Тестовый Платеж через Coinbase</button>
-    <button onclick="sendPayment('trustwallet')">Тестовый Платеж через Trust Wallet</button>
-    <button onclick="sendPayment('tonkeeper')">Тестовый Платеж через Tonkeeper</button>
-
-    <script src="https://cdn.jsdelivr.net/npm/tonweb"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <h1>Валентинка для Малышевой Вероники!</h1>
+    
+    <div class="wishes">
+        <p>Моя самая любимая девочка, с Днем святого Валентина!</p>
+        <p>Я безумно сильно тебя люблю.</p>
+        <p>Я безумно счастлив, что ты моя.</p>
+        <p>Мы вместе уже год, и за это время ты подарила мне:</p>
+    
+    <div class="wish-container" id="wish">Ты мое счастье ❤️</div>
+    
+    <div class="buttons">
+        <button onclick="prevWish()">Назад</button>
+        <button onclick="nextWish()">Вперед</button>
+    </div>
+    
+    <button onclick="window.location.href='memories.html'" style="margin-top: 20px;">Воспоминания</button>
+</div>
     <script>
-        // Функция для отправки тестового платежа через выбранный кошелек
-        function sendPayment(walletType) {
-            if (walletType === 'metamask') {
-                sendMetaMaskPayment();
-            } else if (walletType === 'coinbase') {
-                sendCoinbasePayment();
-            } else if (walletType === 'trustwallet') {
-                sendTrustWalletPayment();
-            } else if (walletType === 'tonkeeper') {
-                sendTonkeeperPayment();
-            }
+        const wishes = [
+            "Ты мое счастье ❤️",
+            "Ты согреваешь мое сердце 💕",
+            "Каждый день с тобой – это радость 😘",
+            "Я хочу провести с тобой всю жизнь 💖",
+            "Ты делаешь меня лучше 🥰"
+        ];
+        let currentWish = 0;
+        
+        function updateWish() {
+            document.getElementById('wish').innerText = wishes[currentWish];
         }
-
-        // Тестовый платеж через MetaMask
-        async function sendMetaMaskPayment() {
-            if (window.ethereum) {
-                const web3 = new Web3(window.ethereum);
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const accounts = await web3.eth.getAccounts();
-                const address = accounts[0];
-
-                const transaction = {
-                    from: address,
-                    to: '0xRecipientAddressHere',  // Адрес получателя
-                    value: web3.utils.toWei('0.01', 'ether'),  // Тестовая сумма
-                    gas: 21000,
-                };
-
-                await web3.eth.sendTransaction(transaction);
-                alert('Тестовый платеж через MetaMask успешно выполнен!');
-            } else {
-                alert('MetaMask не установлен!');
-            }
+        
+        function nextWish() {
+            currentWish = (currentWish + 1) % wishes.length;
+            updateWish();
         }
-
-        // Тестовый платеж через Coinbase Wallet
-        async function sendCoinbasePayment() {
-            if (window.coinbaseWallet) {
-                const web3 = new Web3(window.coinbaseWallet);
-                const accounts = await web3.eth.getAccounts();
-                const address = accounts[0];
-
-                const transaction = {
-                    from: address,
-                    to: '0xRecipientAddressHere',
-                    value: web3.utils.toWei('0.01', 'ether'),
-                    gas: 21000,
-                };
-
-                await web3.eth.sendTransaction(transaction);
-                alert('Тестовый платеж через Coinbase Wallet успешно выполнен!');
-            } else {
-                alert('Coinbase Wallet не установлен!');
-            }
+        
+        function prevWish() {
+            currentWish = (currentWish - 1 + wishes.length) % wishes.length;
+            updateWish();
         }
-
-        // Тестовый платеж через Trust Wallet
-        async function sendTrustWalletPayment() {
-            if (window.ethereum) {
-                const web3 = new Web3(window.ethereum);
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const accounts = await web3.eth.getAccounts();
-                const address = accounts[0];
-
-                const transaction = {
-                    from: address,
-                    to: '0xRecipientAddressHere',
-                    value: web3.utils.toWei('0.01', 'ether'),
-                    gas: 21000,
-                };
-
-                await web3.eth.sendTransaction(transaction);
-                alert('Тестовый платеж через Trust Wallet успешно выполнен!');
-            } else {
-                alert('Trust Wallet не установлен!');
-            }
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            document.body.appendChild(heart);
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-50px';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
         }
-
-        // Тестовый платеж через Tonkeeper
-        async function sendTonkeeperPayment() {
-            if (window.tonkeeper && window.tonkeeper.isTonkeeper) {
-                try {
-                    // Получаем адрес из Tonkeeper
-                    const address = await window.tonkeeper.request({
-                        method: 'ton_requestAccounts'
-                    });
-
-                    const tonweb = new TonWeb();
-                    const wallet = tonweb.wallet.create({ publicKey: address });
-
-                    const transaction = await wallet.createTransfer({
-                        to: '0xRecipientAddressHere',  // Адрес получателя
-                        value: '1000000000',  // Тестовая сумма (1 TON)
-                        sendMode: 3  // Используем sendMode 3 для отправки
-                    });
-
-                    await wallet.sendTransaction(transaction);
-                    alert('Тестовый платеж через Tonkeeper успешно выполнен!');
-                } catch (error) {
-                    alert('Ошибка при подключении Tonkeeper: ' + error.message);
-                }
-            } else {
-                alert('Tonkeeper не установлен!');
-            }
-        }
+        
+        setInterval(createHeart, 200);
     </script>
 </body>
 </html>
